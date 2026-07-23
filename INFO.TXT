@@ -1,0 +1,15 @@
+﻿M3D2D: A voxel renderer free from rays, cones, /, * or floats (slow, will be fast. Commonality reusing serialism is more elegant, efficient than parallelism which is defeatism).
+Prior art, references: http://goo.gl/sdjXVG
+
+
+Imagine a view pyramid & a cube (not necessarily in the pyramid). Narrow e.g., by dichotomy, pyramid about cube. If the intersection of a pyramid with view plane (a rectangle) is occluded then we're done i.e., the narrowing process is pursued no further & the cube is rejected. Otherwise if rectangle small enough or cube leaf then output rectangle in the color of cube. Otherwise proceed to the branches (octree or BVH for familiar animation), preferably in front-to-back fashion (no Z-buffer): from cube to rectangle by way of pyramid or, rendering as lossy data compression.
+
+/, * or floats are avoided by working with the intersections of pyramid with 9 parallel planes in view space, one of which is the view plane & the others pass through the vertices of cube: 9 rectangles. The rectangles of an octant of cube are constructed from those of said cube, by taking appropriate midsides i.e., suppose rectangles with sides Lj, Uj, Rj & Dj (0 <= j < 8) for the father's vertices. We would like to know the rectangle Lij, Uij, Rij & Dij for the vertex j of the ith child: Xij = (Xi + Xj) / 2 where X = L, U, R or D.
+
+Mouse + l. button to look around, arrows (+ shift + control) to move & +/- or Q/W to vary the fidelity.
+
+Each armadillo is a tree of height 10 built on 172974 pts. The client area of the window is 1024 * 768.
+
+Clipping, projection & perspective-correct MIP texture mapping can be concisely done without /, * or floats, according to the above, cf. the skybox (octree of height 7, toggle with S).
+
+The edge artifacts are no bug: out of sight culling is reduced to occlusion culling in the overscan.
