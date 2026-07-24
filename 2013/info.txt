@@ -1,0 +1,48 @@
+"Real Programmers scorn floating point arithmetic. The decimal point was invented for pansy bedwetters who are unable to "think big."" (Search "float" in "logical-design-of-an-electronic-computing-instrument.pdf" by A. W. Burks, H. H. Goldstine & J. von Neumann).
+
+P7 & P9.exe are very slow starters, not that they fare any better afterwards. (The examples do 1024 * 768/1024 * 32: set your display mode accordingly. P9 = 512 * 512 armadillos, P7 = 128 * 128. Armadillo = octree of height 10 = 172974 pts.). I1* are even slower though they octasect less. S7.exe = 128 * 128 stadia. Stadium = octree of height 13 = 693896 pts. SAM.exe = 1024 * 1024 armadillos (M means Manhattan distance).
+
+Should be compared to Geoverse View point (not rectangle) output performance.
+
+Rectangles: the silhouette is usually farther away than the seen interior hence they are smaller there: no jaggedness. You can stop higher in the octree because they fill the gaps.
+
+Start with R0*.c: recursive.
+
+Ugly, but why should I deceive you with worthless eye candy? I leave that to demomakers or game developers. L. E. J. Brouwer: "The construction itself is an art, its application to the world an evil parasite". We do unleavened 3-D to 2-D conversion i.e., data compression. What you do is ugly body in beautiful clothing.
+
+Woe unto you, scribes and Pharisees, hypocrites! for ye are like unto whited sepulchres, which indeed appear beautiful outward, but are within full of dead men's bones, and of all uncleanness. (Matthew 23.27)
+
+Why is this rather fast? Why are Huffman coded things rather small? The analogy is this: frequent things are given less bits / far away things are frequent & small: you need to descend less in the octree.
+
+Rendering is but lossy compression.
+
+Claim: by 2014 a satisfactory formulation shall be (or is already) given unto me. Why? Not because I am good but because I fear (dread) the Father of Jesus.
+
+There is a variant that is more satisfactory than *0* in that it should octasect less using cube bounding pyramids (& still free from /, * etc.). Perhaps it is faster (should have it implemented soon).
+
+Nested (preferably bottomless: no far or near planes because it is kind of weak) pyramids, octree (preferably front-to-back for occlusion culling) 3-D to 2-D conversion:
+Consider a pyramid P & a cube O. Narrow P about O (this is literally orthogonal to what you all do, who either go to the object as in raycasting or bring it back to you as in / z. One is astonished at the world of different approaches to rendering out there & you still are entrenched in that uninteresting stuff casting NVIDIA worship. Blame the decade of bureaucracy that GPU programming is.
+Parallelism is euphemism for defeatism). If O not occluded (pyramid quadtree lookup for this, cf. Meagher. A flat occlusion bitmap should perhaps not be frowned upon, in view of the rather modest scale) & small enough (leaf octrees are considered small enough even if big) then output the corresponding rectangle (intersection between P & view plane) updating the quadtree as a matter of course. If not small enough then proceed to the octree branches, in front-to-back fashion.
+
+This can (& hopefully shall) be done free from any float, * or / though a * variant may be noticeably faster because less memory harassing. This is satisfactory as far as I am concerned but perhaps not at all fast. Why is that satisfactory? Because you don't have to exactly see if a cube is occluded for, after all, doing so still may not contribute to the output (if occluded then no contribution but certainly not if not occluded then contribution).
+
+As before, the idea of synced view space aligned frames, the planes of which pass through the vertices of the cube, takes out the trash of *, / or evil floats.
+
+The above has been made into sketches of implementations: Q*.
+*Q* (quads i.e., intersections between cube bounding pyramids & view plane) are slow at the moment. The problem is, they are decidedly recalcitrant in the face of the particular occlusion quadtree format being used (e.g., *0* use 1 bit per subtree in breadth-first order. By the way, the octree is built on a Z ordered sequence of points. A depth-first, would be mem. hierarchy/rendering traversal friendly octree results). This is not going to remain this way. Trial & error might have to happen here.
+
+A flat 1 bit per pixel draw buffer was tried (32-bit I/O, see *Q0*.exe but beware the low performance. They keep octasecting until leaf or the rectangle X * Y is such that X or Y <= 2. Euclideon does that. Bruce Dell, I now think that God has chosen me to punish you). This is faster but still slow hence error. Likely next trial: k-d tree. Rejoice not, what was claimed won't remain undone.
+
+SAM.exe etc. were coerced into exhibiting curious viewport edges artifacts that should appeal to UD investigators. This is what happens when you start rejecting big cubes that intersect planes of the view pyramid. In an early UD this occurred on the right & bottom edges only.
+
+*0* are thoroughly unsatisfactory, they are merely stripped down implementations of M3D2D.txt where one blindly (i.e., is constrained by quadtree 3-D view subspaces) octasects octrees. I1* implement the actual alg.
+
+Compilers/optimizers have difficulties with the code.
+
+A novel volume renderer: Take a pyramid P (quadtree) & a cube C (octree), the latter can be not included in the former. Octasect C, building a front-to-back list of cubes while rejecting those cubes that are disjoint from P, until a subcube C’ is included in P. Descend the quadtree pyramid P until pyramid is black, a leaf or C’ is included in no pyramid quadrant (i.e., C’ spans subpyramids), call the reached pyramid P’. If P’ is not black then if P’ is a leaf, paint the corresponding viewport rectangle with the color of C’ & update the pyramid quadtree to reflect the blackening of P’. Otherwise, for each quadrant P’i of P, if P’i is not black then apply this whole procedure to P’i & C’.
+
+Should be implemented shortly.
+
+Controls: arrow + shift & mouse + left button.
+
+2013, Made in Tunisia.
