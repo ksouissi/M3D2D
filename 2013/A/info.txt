@@ -1,0 +1,13 @@
+A voxel renderer free from rays, cones, /, * or floats (very slow, under construction): rendering as lossy data compression.
+
+Imagine a view pyramid & a cube (not necessarily in the pyramid). Narrow e.g., by dichotomy, pyramid about cube. If the intersection of a pyramid with view plane (a rectangle) is occluded then we're done i.e., the narrowing process is pursued no further & the cube is rejected. Otherwise if rectangle small enough or cube leaf then output rectangle in the color of cube. Otherwise proceed to the branches (octree), preferably in front-to-back fashion (no Z-buffer): from cube to rectangle by way of pyramid.
+
+/, * or floats are avoided by working with the intersections of pyramid with 9 parallel planes in view space, one of which is the view plane & the others pass through the vertices of cube: 9 rectangles. The rectangles of an octant of cube are constructed from those of said cube, by taking appropriate midsides.
+
+Clipping, projection & perspective-correct MIP texture mapping can be concisely done without /, * or floats, according to the above.
+
+Mouse + l. button to look around, arrows (+ shift) to move & +/- to vary the fidelity.
+Each armadillo is a tree of height 10/9/8/7/6 (A0/1/2/3/4) built on 172974 pts.
+The client area of the window is 1024 * 768.
+
+The edge artifacts are no bug: out of sight culling is reduced to occlusion culling: overscan.
